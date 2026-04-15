@@ -20,7 +20,7 @@ on:
 jobs:
   generate-and-test-apk:
     if: github.event_name != 'pull_request' || ( github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'android-test-maestro-cloud'))
-    name: Generate and Test Test APK (Maestro Cloud)
+    name: Generate and Test APK (Maestro Cloud)
     runs-on: ubuntu-latest
 
     steps:
@@ -32,21 +32,22 @@ jobs:
       - name: 📦 Setup Node + PNPM + install deps
         uses: ./.github/actions/setup-node-pnpm-install
 
-      - name: 📦 Set Up JDK + Generate Test APK
+      - name: ☕ Setup JDK + Generate APK
         uses: ./.github/actions/setup-jdk-generate-apk
         with:
           APP_ENV: staging
 
-      - name: Upload Test APK
+      - name: 📤 Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: test-apk
           path: ./android/app/build/outputs/apk/release/app-release.apk
 
-      - name: 📱 Run E2E Tests with Maestro Cloud
-        uses: mobile-dev-inc/action-maestro-cloud@v1.4.1
+      - name: 📱 Run Maestro Cloud Tests
+        uses: mobile-dev-inc/action-maestro-cloud@v2.0.2
         with:
           api-key: ${{ secrets.MAESTRO_CLOUD_API_KEY }}
+          project-id: ${{ secrets.MAESTRO_PROJECT_ID }}
           app-file: ./android/app/build/outputs/apk/release/app-release.apk
           env: |
             APP_ID=com.obytes.staging
