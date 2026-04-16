@@ -35,7 +35,7 @@ jobs:
       - name: ☕ Setup JDK + Generate APK
         uses: ./.github/actions/setup-jdk-generate-apk
         with:
-          APP_ENV: staging
+          APP_ENV: preview
 
       - name: 📤 Upload APK
         uses: actions/upload-artifact@v4
